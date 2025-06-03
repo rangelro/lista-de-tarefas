@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         borderRadius:3,
     },
     cardsText:{
-        fontSize:12,
+        fontSize:16,
         fontWeight:'bold',
     },
     titulo:{

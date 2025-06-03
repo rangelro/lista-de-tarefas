@@ -4,7 +4,7 @@ import {StyleSheet , View , Text, TouchableOpacity } from "react-native";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 type TaskRowProps ={
-    isChecked: boolean, // para marcar se está checado
+    isChecked: boolean, 
     text: string,
     onToggle?: () => void,
     onDelete?: () => void,
@@ -14,9 +14,10 @@ export default function TaskRow({isChecked,text,onToggle,onDelete}:TaskRowProps)
     return (
         <View style={styles.row}>
 
-            <View style={[styles.checkboxContainer,{backgroundColor: isChecked ? 'green' : '#E88A1A'}]}>
+            <View style={[styles.checkboxContainer,{backgroundColor: isChecked ? '#0E9577' : '#E88A1A'}]}>
                 
                 <MaterialIcons 
+                    onPress={onToggle}
                     name={isChecked ? 'check-box' : 'check-box-outline-blank'}
                     size={24}
                     style={{color:'white',}}
@@ -36,6 +37,8 @@ export default function TaskRow({isChecked,text,onToggle,onDelete}:TaskRowProps)
     );
 
 }
+
+
 
 const styles = StyleSheet.create({
     row:{

@@ -1,42 +1,110 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Text } from "@react-navigation/elements";
 
 import { SafeAreaView } from "react-native-safe-area-context";
-import {StyleSheet , View} from "react-native";
+import {Alert, FlatList, StyleSheet , TextInput, TouchableOpacity, View} from "react-native";
 
 import Card from "@/components/cards";
 import TaskRow from "@/components/taskRow";
 
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
+
+
+interface Task{
+    id: string,
+    text: string,
+    isChecked:boolean,
+}
 
 
 export default function ToDoList(){
 
+    const [newTaskText,setNewTaskText] = useState("");
+    const [tasks,setTasks] = useState<Task[]>([]);
+
+    const addTask = () =>{
+        if(newTaskText.trim()){
+            const newTask:  Task = {
+                id: String(Date.now()),
+                text: newTaskText.trim(),
+                isChecked:false,
+            };
+            setTasks([...tasks,newTask])
+            setNewTaskText('');
+        }
+    }
+
+    const toggleDone = (id:string) =>{
+        setTasks(
+            tasks.map(task => 
+                task.id === id ? {...task,isChecked: !task.isChecked} : task
+            )
+        );
+    }
+    const deleteTask = (id:string) => {
+
+        Alert.alert(
+            "Confirmar exclusão",
+            "Tem certeza que deseja deletar essa tarefa?",
+            [
+                {text:"Cancelar", style: 'cancel'},
+                {text:"Excluir", style: 'destructive',onPress: () => {
+                    setTasks(tasks.filter(task => task.id !== id));
+                }}
+            ]
+        );
+    }
 
     return(
         <SafeAreaView style={styles.container}>
+
+            <View style={styles.addTaskContainer}>
+                <TextInput
+                    style={styles.text} 
+                    placeholder="nova tarefa"
+                    value={newTaskText}
+                    onChangeText={setNewTaskText}
+                />
+                <TouchableOpacity style={styles.taskInputBtn} onPress={addTask}>
+                    <MaterialIcons
+                        name="add"
+                        size={24}
+                        style={{color:'#fff'}} 
+                    />
+                </TouchableOpacity>
+            </View>
             
             <View style={styles.tasksCards}>
-                <Card titulo="Cadastradas:" colorText="black" quantidade="1"/>
-                <Card titulo="Em aberto:" colorText="red" quantidade="1"/>
-                <Card titulo="Finalizadas:" quantidade="1" colorText="green" />
+                <Card titulo="Cadastradas:" colorText="black" quantidade={tasks.length.toString()}/>
+                <Card titulo="Em aberto:" colorText="red" quantidade={tasks.filter(tasks => !tasks.isChecked).length.toString()}/>
+                <Card titulo="Finalizadas:" colorText="green" quantidade={tasks.filter(tasks => tasks.isChecked).length.toString()}/>
             </View>
 
             <Text style={styles.text}> Em aberto: </Text>
 
             <View>
+                <FlatList 
+                data={tasks} 
+                keyExtractor={(item => item.id)}
+                renderItem={({item}) => (
+                    <TaskRow
+                        isChecked={item.isChecked}
+                        text={item.text}
+                        onToggle={() => toggleDone(item.id)} 
+                        onDelete={() => deleteTask(item.id)}
+                    />
+                )}                
+                />
 
-                <TaskRow isChecked={false} text="Enviar atividade"/>
-                <TaskRow isChecked={false} text="Assistir aula sobre Hooks" />
             </View>
 
             
             <Text style={styles.text}> Finalizadas: </Text>
             <View>
 
-                <TaskRow isChecked={true} text="Assistir aula sobre Telas"/>
-                <TaskRow isChecked={true} text="Assistir aula sobre Estilos"/>
+               
             </View>
 
         </SafeAreaView>
@@ -66,5 +134,24 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginLeft:10,
         marginVertical:5,
-    }
+    },
+    addTaskContainer:{
+        flexDirection:'row',
+        backgroundColor: '#252627',
+        height: 50,
+        marginHorizontal:20,
+        marginVertical:10,
+        justifyContent:'space-between',
+        alignItems:'center',
+        borderRadius:5,
+        fontSize:24,
+    },
+    taskInputBtn:{
+        backgroundColor: '#1E1E1E',
+        height:50,
+        paddingHorizontal:5,
+        justifyContent:'center'
+    },
+
+
 });
