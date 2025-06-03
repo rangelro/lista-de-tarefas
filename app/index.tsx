@@ -24,6 +24,10 @@ export default function ToDoList(){
     const [newTaskText,setNewTaskText] = useState("");
     const [tasks,setTasks] = useState<Task[]>([]);
 
+    const tasksOpen = tasks.filter(task => !task.isChecked);
+    const tasksClosed = tasks.filter(task => task.isChecked);
+
+
     const addTask = () =>{
         if(newTaskText.trim()){
             const newTask:  Task = {
@@ -33,7 +37,12 @@ export default function ToDoList(){
             };
             setTasks([...tasks,newTask])
             setNewTaskText('');
+            Alert.alert(
+                "Tarefa adicionada",
+                "Sua tarefa foi adicionada com sucesso!",
+            )
         }
+
     }
 
     const toggleDone = (id:string) =>{
@@ -63,13 +72,13 @@ export default function ToDoList(){
             <View style={styles.addTaskContainer}>
                 <TextInput
                     style={styles.text} 
-                    placeholder="nova tarefa"
+                    placeholder="Nova tarefa"
                     value={newTaskText}
                     onChangeText={setNewTaskText}
                 />
                 <TouchableOpacity style={styles.taskInputBtn} onPress={addTask}>
                     <MaterialIcons
-                        name="add"
+                        name="add-task"
                         size={24}
                         style={{color:'#fff'}} 
                     />
@@ -86,7 +95,7 @@ export default function ToDoList(){
 
             <View>
                 <FlatList 
-                data={tasks} 
+                data={tasksOpen} 
                 keyExtractor={(item => item.id)}
                 renderItem={({item}) => (
                     <TaskRow
@@ -103,7 +112,18 @@ export default function ToDoList(){
             
             <Text style={styles.text}> Finalizadas: </Text>
             <View>
-
+                <FlatList 
+                    data={tasksClosed} 
+                    keyExtractor={(item => item.id)}
+                    renderItem={({item}) => (
+                        <TaskRow
+                            isChecked={item.isChecked}
+                            text={item.text}
+                            onToggle={() => toggleDone(item.id)} 
+                            onDelete={() => deleteTask(item.id)}
+                        />
+                    )}                
+                />
                
             </View>
 
@@ -149,8 +169,10 @@ const styles = StyleSheet.create({
     taskInputBtn:{
         backgroundColor: '#1E1E1E',
         height:50,
+        width:50,
         paddingHorizontal:5,
-        justifyContent:'center'
+        justifyContent:'center',
+        alignItems:'center'
     },
 
 
