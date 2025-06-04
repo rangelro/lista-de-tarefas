@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         justifyContent:'space-between',
     },
     checkboxContainer:{
-        padding:16,
+        padding:15,
         borderRadius: 5,
         alignItems:'center',
         justifyContent:'center'
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
         borderRadius: 5,
-        padding:16
+        padding:15
     },
     texto:{
         color:'white',

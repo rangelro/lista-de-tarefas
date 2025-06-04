@@ -34,7 +34,8 @@ const styles = StyleSheet.create({
         fontWeight:'bold',
     },
     titulo:{
-        fontSize:15,
+        fontSize:18,
+        fontWeight:'semibold',
         paddingBottom:5,
     }
 });
