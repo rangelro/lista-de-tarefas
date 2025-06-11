@@ -30,33 +30,30 @@ export default function ToDoList(){
     const tasksOpen = tasks.filter(task => !task.isChecked);
     const tasksClosed = tasks.filter(task => task.isChecked);
 
-    useEffect(() => {
-        const saveTasks = async() => {
-            try{
-                await AsyncStorage.setItem('@tasks',JSON.stringify(tasks));
-            }catch(e){
-                Alert.alert(
-                    "Erro ao salvar tarefas"
-                )
-            }
-        };
-        saveTasks();
-    },[tasks]);
+
+    const saveTasks = async() => {
+        try{
+            console.log("ta salvando direito", JSON.stringify(tasks)); 
+            await AsyncStorage.setItem('@tasks',JSON.stringify(tasks));
+        }catch(e){
+            console.log("Erro ao salvar tarefas")
+        }
+    };
+
+
 
     useEffect(() =>{
-        const loadTaks = async () => {
+        const loadTasks = async () => {
             try {
                 const json = await AsyncStorage.getItem('@tasks');
                 if (json !== null){
                     setTasks(JSON.parse(json))
                 }
             }catch(e){
-                Alert.alert(
-                    "Erro ao carregar tarefas"
-                )
+                console.log("Erro ao carregar tarefas")
             }
         };
-        loadTaks();
+        loadTasks();
     },[])
 
     const addTask = () =>{
@@ -67,6 +64,7 @@ export default function ToDoList(){
                 isChecked:false,
             };
             setTasks([...tasks,newTask])
+            saveTasks();
             setNewTaskText('');
             Alert.alert(
                 "Tarefa adicionada",
@@ -82,6 +80,7 @@ export default function ToDoList(){
                 task.id === id ? {...task,isChecked: !task.isChecked} : task
             )
         );
+        saveTasks();
     }
     const deleteTask = (id:string) => {
 

@@ -1,9 +1,18 @@
+# Lista de Tarefas 📋
 
-Projeto para a disciplina de Desenvolvimento para Dispositivos Móveis
+Aplicativo desenvolvido para a disciplina de Desenvolvimento para Dispositivos Móveis.
 
-Lista de tarefas (to-do list)
+Gerencie suas tarefas de forma simples e eficiente:
+- Adicione, marque como concluída e exclua tarefas
+- Visualize o total, as pendentes e as finalizadas
+- Interface intuitiva e responsiva
 
-Atualmente o projeto conta apenas com a criação de componentes simples.
-Será desenvolvido ao longo da disciplina e progressivamente atualizado aqui!
+## Como rodar
 
-Espero que te seja útil. 
+1. Instale as dependências:
+   npm install
+
+2. Inicie o projeto:
+    npx expo start
+
+Espero que te seja útil!
