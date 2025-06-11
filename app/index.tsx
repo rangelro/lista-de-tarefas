@@ -5,11 +5,14 @@ import { Text } from "@react-navigation/elements";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {Alert, FlatList, StyleSheet , TextInput, TouchableOpacity, View} from "react-native";
 
+import { useEffect } from "react";
+import  AsyncStorage  from '@react-native-async-storage/async-storage';
+
+
 import Card from "@/components/cards";
 import TaskRow from "@/components/taskRow";
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-
 
 
 interface Task{
@@ -27,6 +30,34 @@ export default function ToDoList(){
     const tasksOpen = tasks.filter(task => !task.isChecked);
     const tasksClosed = tasks.filter(task => task.isChecked);
 
+    useEffect(() => {
+        const saveTasks = async() => {
+            try{
+                await AsyncStorage.setItem('@tasks',JSON.stringify(tasks));
+            }catch(e){
+                Alert.alert(
+                    "Erro ao salvar tarefas"
+                )
+            }
+        };
+        saveTasks();
+    },[tasks]);
+
+    useEffect(() =>{
+        const loadTaks = async () => {
+            try {
+                const json = await AsyncStorage.getItem('@tasks');
+                if (json !== null){
+                    setTasks(JSON.parse(json))
+                }
+            }catch(e){
+                Alert.alert(
+                    "Erro ao carregar tarefas"
+                )
+            }
+        };
+        loadTaks();
+    },[])
 
     const addTask = () =>{
         if(newTaskText.trim()){
